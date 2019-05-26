@@ -1,7 +1,7 @@
-
 var Jump = function () {
     console.log("123");
     this.config = {
+        cameraRange: 50,
         background: 0x282828
     };
 
@@ -12,48 +12,74 @@ var Jump = function () {
 
     this.scene = new THREE.Scene();
 
-    // this.camera = new THREE.OrthographicCamera(this.size.width/-40, this.size.width/40, this.size.height/40, this.size.height/-40, 0, 5000);
-    this.camera = new THREE.OrthographicCamera(window.innerWidth/-40, window.innerWidth/40, window.innerHeight/40, window.innerHeight/-40, 0, 5000);
+    // this.camera = new THREE.OrthographicCamera(window.innerWidth/-40, window.innerWidth/40, window.innerHeight/40, window.innerHeight/-40, 0, 5000);
+    this.camera = new THREE.OrthographicCamera(
+        this.size.width/(-1 * this.config.cameraRange), this.size.width/this.config.cameraRange,
+        this.size.height/this.config.cameraRange, this.size.height/(-1 * this.config.cameraRange),
+        0, 5000);
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setClearColor(new THREE.Color(0xEEEEEE));
-    this.renderer.setSize(innerWidth, innerHeight);
+    this.renderer.setSize(this.size.width, this.size.height);
     this.renderer.shadowMapEnabled = true;
 
     var axes = new THREE.AxisHelper(20);
     this.scene.add(axes);
 
-    var planeGeometry = new THREE.PlaneBufferGeometry(60, 20);
-    var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+    var planeGeometry = new THREE.PlaneGeometry(60, 20);
+    var planeMaterial = new THREE.MeshBasicMaterial({color: 0xcccccc});
     var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.receiveShadow = true;
+
     plane.rotation.x = -0.5*Math.PI;
     plane.position.x = 15;
     plane.position.y = 0;
     plane.position.z = 0;
+
+    var light = new THREE.AmbientLight(0xffffff, 0.3);
+    this.scene.add(light);
+
+    this.directionalLight = new THREE.DirectionalLight(0xffffff, 10);
+    this.directionalLight.distance = 0;
+    this.directionalLight.position.set(60, 50, 40);
+    this.directionalLight.castShadow = true;
+    this.directionalLight.intensity = 0.5;
+    this.scene.add(this.directionalLight);
+
 
     this.scene.add(plane);
 };
 
 
 Jump.prototype = {
+    // init: function () {
+    //     window.console.log("is Initing");
+    //
+    //
+    //     document.getElementById("Main-Container").appendChild(this.renderer.domElement);
+    //
+    //     this.renderer.render(this.scene, this.camera);
+    // },
+
+
+
     init: function () {
         window.console.log("is Initing");
 
         this.camera.position.x = 100;
         this.camera.position.y = 100;
         this.camera.position.z = 100;
-        this.camera.lookAt(0, 0, 0);
+        this.camera.lookAt(this.scene.position);
 
         // add the cube to the scene
         this._createCube();
 
-        var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(-40, 60, -10);
-        spotLight.castShadow = true;
-        this.scene.add(spotLight);
+        // var spotLight = new THREE.SpotLight(0xffffff);
+        // spotLight.position.set(-40, 60, -10);
+        // spotLight.castShadow = true;
+        // this.scene.add(spotLight);
 
         document.getElementById("Main-Container").appendChild(this.renderer.domElement);
+        this.renderer.render(this.scene, this.camera);
     },
 
     _createCube: function(){
@@ -102,7 +128,7 @@ Jump.prototype = {
 
 
 
-
+//
 // Jump.prototype = {
 //     init: function () {
 //         var self = this;
