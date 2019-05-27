@@ -5,9 +5,11 @@ var Jump = function () {
         cameraRange: 30,
         background: 0x282828,
 
-        potentialEnergyUnit: 0.01,
-        distanceUnit: 5,
-        heightUnit: 5,
+        potentialEnergyUnit: 0.05,
+        distanceUnit: 0.25,
+        heightUnit: 0.5,
+
+        cameraMoveUnit: 0.05,
     };
 
     this.size = {
@@ -47,7 +49,7 @@ var Jump = function () {
     plane.position.y = 0;
     plane.position.z = 0;
 
-    // this.scene.add(plane);
+    this.scene.add(plane);
 
     var spotLight = new THREE.SpotLight(0xffffff);
     spotLight.position.set(-40, 60, -10);
@@ -63,7 +65,7 @@ Jump.prototype = {
         window.console.log("is Initing");
 
         this._checkUserAgent();
-        this._adjustCamera();
+        this._initCamera();
         this._createJumper();
 
         this.renderer.render(this.scene, this.camera);
@@ -93,11 +95,46 @@ Jump.prototype = {
         }
     },
 
-    _adjustCamera: function(){
+    _initCamera: function(){
         this.camera.position.x = -100;
         this.camera.position.y = 125;
         this.camera.position.z = 100;
         this.camera.lookAt(this.scene.position);
+    },
+
+    _adjustCamera: function(){
+        var self = this;
+
+        var origin = {
+            x: self.camera.position.x,
+            y: self.camera.position.y,
+            z: self.camera.position.z,
+        };
+
+        var target = {
+            x: self._jumper.position.x - 100,
+            y: self._jumper.position.y + 125,
+            z: self._jumper.position.z + 100,
+        };
+
+        var direction = new THREE.Vector3(target.x - origin.x, target.y - origin.y, target.z - origin.z);
+
+        if(self.camera.position.x < self._jumper.position.x - 100){
+            self.camera.translateOnAxis(direction, self.config.cameraMoveUnit);
+
+            self.renderer.render(self.scene, self.camera);
+            requestAnimationFrame(function () {
+                self._adjustCamera();
+            })
+        }
+    },
+
+    /**
+     * @return {number}
+     */
+    CalculateDistance: function(beginPoint, endPoint){
+        return Math.sqrt(Math.pow((beginPoint.x - endPoint.x),2)
+            + Math.pow((beginPoint.y - endPoint.y),2) + Math.pow((beginPoint.z - endPoint.z),2))
     },
 
     _createCube: function(){
@@ -169,7 +206,9 @@ Jump.prototype = {
             if (!self.jumperStatus.isReadyToJump && self._jumper.position.y > 0 || self.jumperStatus.potentialEnergy > 0){
 
                 self._jumper.scale.y += 0.01;
+                self._jumper.position.x += self.config.distanceUnit;
                 self._jumper.position.y += self.jumperStatus.potentialEnergy * self.config.heightUnit;
+
 
                 self.jumperStatus.potentialEnergy -= self.config.potentialEnergyUnit;
 
@@ -178,6 +217,7 @@ Jump.prototype = {
                 frameHandler = requestAnimationFrame(act);
             }else{
                 cancelAnimationFrame(frameHandler);
+                self._adjustCamera();
             }
         }
         act();
