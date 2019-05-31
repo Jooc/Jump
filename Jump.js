@@ -1,5 +1,11 @@
 var Jump = function () {
     console.log("123");
+
+    this.size = {
+        width: window.innerWidth,
+        height: window.innerHeight
+    };
+
     this.config = {
         isMobile: false,
         cameraRange: 30,
@@ -24,11 +30,7 @@ var Jump = function () {
         },
 
         maxDistance: 10,
-    };
-
-    this.size = {
-        width: window.innerWidth,
-        height: window.innerHeight
+        maxCubeNum: 10,
     };
 
     this.jumperStatus = {
@@ -67,7 +69,7 @@ var Jump = function () {
     plane.position.y = 0;
     plane.position.z = 0;
 
-    // this.scene.add(plane);
+    this.scene.add(plane);
 
     var spotLight = new THREE.SpotLight(0xffffff);
     spotLight.position.set(-40, 60, -10);
@@ -163,9 +165,18 @@ Jump.prototype = {
         if (this.cubeList.length === 0){
             this._createCube(0, 0, 0);
         }
-        
+
         //TO Update
+
+        var
+
+        this._createCube(nextCubePosition.x, nextCubePosition.y, nextCubePosition.z)
+        // this._createCube(0, 0, 0);
+    },
+
+    _getNextDirection: function(){
         var direction = '';
+
         var disition = Math.random();
 
         if (disition < 0.33){
@@ -180,7 +191,7 @@ Jump.prototype = {
 
         var nextCubePosition = {
             x: 0, y: 0, z: 0,
-        }
+        };
 
         nextCubePosition.x = currentCube.position.x;
         nextCubePosition.y = currentCube.position.y;
@@ -188,16 +199,14 @@ Jump.prototype = {
 
         //TODO: TEST the direction
         if (direction === 'left'){
-            nextCubePosition.x += this.config.maxDistance * Math.random() + this.config.cubeSize.x;
+            nextCubePosition.x -= this.config.maxDistance * Math.random() + this.config.cubeSize.x;
         }else if (direction === 'right'){
             nextCubePosition.x += this.config.maxDistance * Math.random() + this.config.cubeSize.x;
         }else{
-            nextCubePosition.x += this.config.maxDistance * Math.random() + this.config.cubeSize.x;
+            nextCubePosition.z += this.config.maxDistance * Math.random() + this.config.cubeSize.x;
         }
 
-        this._createCube(nextCubePosition.x, nextCubePosition.y, nextCubePosition.z)
-        // this._createCube(0, 0, 0);
-
+        return direction;
     },
 
     _createCube: function(coordinateX, coordinateY, coordinateZ){
@@ -217,6 +226,12 @@ Jump.prototype = {
         cube.position.z = coordinateZ;
 
         this.cubeList.push(cube);
+
+        if (this.cubeList.length > this.config.maxCubeNum){
+            window.console.log(this.cubeList.shift());
+        }
+
+
         window.console.log(this.cubeList);
         this.scene.add(cube);
     },
