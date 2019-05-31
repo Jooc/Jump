@@ -36,6 +36,8 @@ var Jump = function () {
     this.jumperStatus = {
         isReadyToJump: false,
         potentialEnergy: 0,
+
+        currentDirection: '',
     };
 
     this.cubeList = [];
@@ -152,13 +154,13 @@ Jump.prototype = {
         }
     },
 
-    /**
-     * @return {number}
-     */
-    CalculateDistance: function(beginPoint, endPoint){
-        return Math.sqrt(Math.pow((beginPoint.x - endPoint.x),2)
-            + Math.pow((beginPoint.y - endPoint.y),2) + Math.pow((beginPoint.z - endPoint.z),2))
-    },
+    // /**
+    //  * @return {number}
+    //  */
+    // CalculateDistance: function(beginPoint, endPoint){
+    //     return Math.sqrt(Math.pow((beginPoint.x - endPoint.x),2)
+    //         + Math.pow((beginPoint.y - endPoint.y),2) + Math.pow((beginPoint.z - endPoint.z),2))
+    // },
 
     UpdateCube: function(){
         //TO INIT
@@ -168,24 +170,8 @@ Jump.prototype = {
 
         //TO Update
 
-        var
-
-        this._createCube(nextCubePosition.x, nextCubePosition.y, nextCubePosition.z)
-        // this._createCube(0, 0, 0);
-    },
-
-    _getNextDirection: function(){
-        var direction = '';
-
-        var disition = Math.random();
-
-        if (disition < 0.33){
-            direction = 'left';
-        }else if (disition <0.66){
-            direction = 'right';
-        }else{
-            direction = 'straight';
-        }
+        var direction = this._getDirection();
+        this.jumperStatus.currentDirection = direction;
 
         var currentCube = this.cubeList[this.cubeList.length-1];
 
@@ -199,11 +185,28 @@ Jump.prototype = {
 
         //TODO: TEST the direction
         if (direction === 'left'){
-            nextCubePosition.x -= this.config.maxDistance * Math.random() + this.config.cubeSize.x;
+            nextCubePosition.z -= this.config.maxDistance * Math.random() + this.config.cubeSize.x;
         }else if (direction === 'right'){
-            nextCubePosition.x += this.config.maxDistance * Math.random() + this.config.cubeSize.x;
-        }else{
             nextCubePosition.z += this.config.maxDistance * Math.random() + this.config.cubeSize.x;
+        }else{
+            nextCubePosition.x += this.config.maxDistance * Math.random() + this.config.cubeSize.x;
+        }
+
+        this._createCube(nextCubePosition.x, nextCubePosition.y, nextCubePosition.z)
+        // this._createCube(0, 0, 0);
+    },
+
+    _getDirection: function(){
+        var direction = '';
+
+        var disition = Math.random();
+
+        if (disition < 0.33){
+            direction = 'left';
+        }else if (disition <0.66){
+            direction = 'right';
+        }else{
+            direction = 'straight';
         }
 
         return direction;
@@ -290,17 +293,11 @@ Jump.prototype = {
 
         function act() {
 
+            self._jumperMove();
+
             if (!self.jumperStatus.isReadyToJump && self.jumperBody.position.y > self.config.cubeSize.y || self.jumperStatus.potentialEnergy > 0){
 
-                self.jumperBody.scale.y += 0.01;
-                self.jumperHead.scale.y += 0.01;
-
-                self.jumperBody.position.x += self.config.distanceUnit;
-                self.jumperHead.position.x += self.config.distanceUnit;
-                self.jumperBody.position.y += self.jumperStatus.potentialEnergy * self.config.heightUnit;
-                self.jumperHead.position.y += self.jumperStatus.potentialEnergy * self.config.heightUnit;
-
-                self.jumperStatus.potentialEnergy -= self.config.potentialEnergyUnit;
+                self._jumperMove();
 
                 self.renderer.render(self.scene, self.camera);
 
@@ -314,6 +311,31 @@ Jump.prototype = {
         act();
 
     },
+
+    _jumperMove: function () {
+        var self = this;
+        var direction = self.jumperStatus.currentDirection;
+
+        self.jumperBody.scale.y += 0.01;
+        self.jumperHead.scale.y += 0.01;
+
+        if(direction === 'left'){
+            self.jumperBody.position.z -= self.config.distanceUnit;
+            self.jumperHead.position.z -= self.config.distanceUnit;
+        }else if(direction === 'right'){
+            self.jumperBody.position.z += self.config.distanceUnit;
+            self.jumperHead.position.z += self.config.distanceUnit;
+        }else{
+            self.jumperBody.position.x += self.config.distanceUnit;
+            self.jumperHead.position.x += self.config.distanceUnit;
+        }
+
+        self.jumperBody.position.y += self.jumperStatus.potentialEnergy * self.config.heightUnit;
+        self.jumperHead.position.y += self.jumperStatus.potentialEnergy * self.config.heightUnit;
+
+        self.jumperStatus.potentialEnergy -= self.config.potentialEnergyUnit;
+    }
+
 
 };
 
