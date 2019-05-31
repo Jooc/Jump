@@ -10,6 +10,20 @@ var Jump = function () {
         heightUnit: 0.5,
 
         cameraMoveUnit: 0.05,
+
+        jumperSize: {
+          x: 1.5,
+          y: 6,
+          z: 1.5,
+        },
+
+        cubeSize: {
+            x: 9,
+            y: 4.5,
+            z: 9,
+        },
+
+        maxDistance: 10,
     };
 
     this.size = {
@@ -22,6 +36,10 @@ var Jump = function () {
         potentialEnergy: 0,
     };
 
+    this.cubeList = [];
+
+
+
     this.scene = new THREE.Scene();
 
     // this.camera = new THREE.OrthographicCamera(window.innerWidth/-40, window.innerWidth/40, window.innerHeight/40, window.innerHeight/-40, 0, 5000);
@@ -33,11 +51,11 @@ var Jump = function () {
     this.renderer = new THREE.WebGLRenderer({antialias: true});
     this.renderer.setClearColor(new THREE.Color(0xEEEEEE));
     this.renderer.setSize(this.size.width, this.size.height);
-    this.renderer.shadowMapEnabled = true;
+    this.renderer.shadowMap.enabled = true;
 
     document.getElementById("Main-Container").appendChild(this.renderer.domElement);
 
-    var axes = new THREE.AxisHelper(20);
+    var axes = new THREE.AxesHelper(20);
     this.scene.add(axes);
 
     var planeGeometry = new THREE.PlaneGeometry(this.size.width, this.size.height);
@@ -49,7 +67,7 @@ var Jump = function () {
     plane.position.y = 0;
     plane.position.z = 0;
 
-    this.scene.add(plane);
+    // this.scene.add(plane);
 
     var spotLight = new THREE.SpotLight(0xffffff);
     spotLight.position.set(-40, 60, -10);
@@ -67,6 +85,8 @@ Jump.prototype = {
         this._checkUserAgent();
         this._initCamera();
         this._createJumper();
+        this.UpdateCube();
+
 
         this.renderer.render(this.scene, this.camera);
 
@@ -103,6 +123,7 @@ Jump.prototype = {
     },
 
     _adjustCamera: function(){
+        // window.console.log("adjusting Camera");
         var self = this;
 
         var origin = {
@@ -112,14 +133,14 @@ Jump.prototype = {
         };
 
         var target = {
-            x: self._jumper.position.x - 100,
-            y: self._jumper.position.y + 125,
-            z: self._jumper.position.z + 100,
+            x: self.jumperBody.position.x - 100,
+            y: self.jumperBody.position.y + 125,
+            z: self.jumperBody.position.z + 100,
         };
 
         var direction = new THREE.Vector3(target.x - origin.x, target.y - origin.y, target.z - origin.z);
 
-        if(self.camera.position.x < self._jumper.position.x - 100){
+        if(self.camera.position.x < self.jumperBody.position.x - 100){
             self.camera.translateOnAxis(direction, self.config.cameraMoveUnit);
 
             self.renderer.render(self.scene, self.camera);
@@ -137,16 +158,66 @@ Jump.prototype = {
             + Math.pow((beginPoint.y - endPoint.y),2) + Math.pow((beginPoint.z - endPoint.z),2))
     },
 
-    _createCube: function(){
-        var cubeGeometry = new THREE.BoxGeometry(4,4,4);
-        var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+    UpdateCube: function(){
+        //TO INIT
+        if (this.cubeList.length === 0){
+            this._createCube(0, 0, 0);
+        }
+        
+        //TO Update
+        var direction = '';
+        var disition = Math.random();
+
+        if (disition < 0.33){
+            direction = 'left';
+        }else if (disition <0.66){
+            direction = 'right';
+        }else{
+            direction = 'straight';
+        }
+
+        var currentCube = this.cubeList[this.cubeList.length-1];
+
+        var nextCubePosition = {
+            x: 0, y: 0, z: 0,
+        }
+
+        nextCubePosition.x = currentCube.position.x;
+        nextCubePosition.y = currentCube.position.y;
+        nextCubePosition.z = currentCube.position.z;
+
+        //TODO: TEST the direction
+        if (direction === 'left'){
+            nextCubePosition.x += this.config.maxDistance * Math.random() + this.config.cubeSize.x;
+        }else if (direction === 'right'){
+            nextCubePosition.x += this.config.maxDistance * Math.random() + this.config.cubeSize.x;
+        }else{
+            nextCubePosition.x += this.config.maxDistance * Math.random() + this.config.cubeSize.x;
+        }
+
+        this._createCube(nextCubePosition.x, nextCubePosition.y, nextCubePosition.z)
+        // this._createCube(0, 0, 0);
+
+    },
+
+    _createCube: function(coordinateX, coordinateY, coordinateZ){
+        window.console.log("Creating Cube");
+
+        var cubeGeometry = new THREE.BoxGeometry(this.config.cubeSize.x,this.config.cubeSize.y, this.config.cubeSize.z);
+        var cubeMaterial = new THREE.MeshLambertMaterial({color: 0x99EBFF});
+
+        cubeGeometry.translate(0, this.config.cubeSize.y/2, 0);
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
         cube.castShadow = true;
+        cube.receiveShadow = true;
 
-        cube.position.x = 0;
-        cube.position.y = 0;
-        cube.position.z = 0;
+        cube.position.x = coordinateX;
+        cube.position.y = coordinateY;
+        cube.position.z = coordinateZ;
 
+        this.cubeList.push(cube);
+        window.console.log(this.cubeList);
         this.scene.add(cube);
     },
 
@@ -157,12 +228,12 @@ Jump.prototype = {
         bodyGeometry.translate(0, 3, 0);
 
         var headGeometry = new THREE.SphereGeometry(1, 64, 64);
-        headGeometry.translate(0, 4, 0);
+        headGeometry.translate(0, 7.5, 0);
 
         this.jumperBody = new THREE.Mesh(bodyGeometry, material);
-        this.jumperBody.position.set(0, 0, 0);
+        this.jumperBody.position.set(0, this.config.cubeSize.y, 0);
         this.jumperHead = new THREE.Mesh(headGeometry, material);
-        this.jumperHead.position.set(0, 3, 0);
+        this.jumperHead.position.set(0, this.config.cubeSize.y, 0);
 
         this.jumperBody.castShadow = true;
         this.jumperHead.castShadow = true;
@@ -182,8 +253,9 @@ Jump.prototype = {
         self.jumperStatus.potentialEnergy = 0;
 
         function act(){
-            if(self._jumper.scale.y > 0.35){
-                self._jumper.scale.y -= 0.02;
+            if(self.jumperBody.scale.y > 0.35){
+                self.jumperBody.scale.y -= 0.02;
+                self.jumperHead.scale.y -= 0.02;
 
                 self.mouseDownFrameHandler = requestAnimationFrame(act);
 
@@ -203,12 +275,15 @@ Jump.prototype = {
 
         function act() {
 
-            if (!self.jumperStatus.isReadyToJump && self._jumper.position.y > 0 || self.jumperStatus.potentialEnergy > 0){
+            if (!self.jumperStatus.isReadyToJump && self.jumperBody.position.y > self.config.cubeSize.y || self.jumperStatus.potentialEnergy > 0){
 
-                self._jumper.scale.y += 0.01;
-                self._jumper.position.x += self.config.distanceUnit;
-                self._jumper.position.y += self.jumperStatus.potentialEnergy * self.config.heightUnit;
+                self.jumperBody.scale.y += 0.01;
+                self.jumperHead.scale.y += 0.01;
 
+                self.jumperBody.position.x += self.config.distanceUnit;
+                self.jumperHead.position.x += self.config.distanceUnit;
+                self.jumperBody.position.y += self.jumperStatus.potentialEnergy * self.config.heightUnit;
+                self.jumperHead.position.y += self.jumperStatus.potentialEnergy * self.config.heightUnit;
 
                 self.jumperStatus.potentialEnergy -= self.config.potentialEnergyUnit;
 
@@ -218,9 +293,11 @@ Jump.prototype = {
             }else{
                 cancelAnimationFrame(frameHandler);
                 self._adjustCamera();
+                self.UpdateCube();
             }
         }
         act();
+
     },
 
 };
