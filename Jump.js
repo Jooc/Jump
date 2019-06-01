@@ -1,3 +1,9 @@
+var MoveStage = {
+    Waiting: 0,
+    StoringEnergy: 1,
+    Moving: 2,
+};
+
 var Jump = function () {
     console.log("123");
 
@@ -34,9 +40,10 @@ var Jump = function () {
     };
 
     this.jumperStatus = {
-        isReadyToJump: false,
+        status: MoveStage.Waiting,
         potentialEnergy: 0,
 
+        lastDirection: '',
         currentDirection: '',
     };
 
@@ -144,6 +151,7 @@ Jump.prototype = {
 
         var direction = new THREE.Vector3(target.x - origin.x, target.y - origin.y, target.z - origin.z);
 
+        //TODO: NEVER STOP this handler
         if(self.camera.position.x < self.jumperBody.position.x - 100){
             self.camera.translateOnAxis(direction, self.config.cameraMoveUnit);
 
@@ -151,6 +159,7 @@ Jump.prototype = {
             requestAnimationFrame(function () {
                 self._adjustCamera();
             })
+        }else {
         }
     },
 
@@ -183,7 +192,7 @@ Jump.prototype = {
         nextCubePosition.y = currentCube.position.y;
         nextCubePosition.z = currentCube.position.z;
 
-        //TODO: TEST the direction
+        //DONE: TEST the direction
         if (direction === 'left'){
             nextCubePosition.z -= this.config.maxDistance * Math.random() + this.config.cubeSize.x;
         }else if (direction === 'right'){
@@ -197,23 +206,35 @@ Jump.prototype = {
     },
 
     _getDirection: function(){
-        var direction = '';
+        this.jumperStatus.lastDirection = this.jumperStatus.currentDirection;
 
+        // INIT
+        if (this.cubeList.length === 1){
+            return 'straight';
+        }
+
+        var direction = '';
         var disition = Math.random();
 
-        if (disition < 0.33){
-            direction = 'left';
-        }else if (disition <0.66){
-            direction = 'right';
+        if (this.jumperStatus.lastDirection === 'left'){
+            direction = disition >= 0.5? 'left': 'straight';
+        }else if(this.jumperStatus.lastDirection === 'right'){
+            direction = disition >= 0.5? 'right': 'straight';
         }else{
-            direction = 'straight';
+            if (disition < 0.33){
+                direction = 'left';
+            }else if (disition <0.66){
+                direction = 'right';
+            }else{
+                direction = 'straight';
+            }
         }
 
         return direction;
     },
 
     _createCube: function(coordinateX, coordinateY, coordinateZ){
-        window.console.log("Creating Cube");
+        // window.console.log("Creating Cube");
 
         var cubeGeometry = new THREE.BoxGeometry(this.config.cubeSize.x,this.config.cubeSize.y, this.config.cubeSize.z);
         var cubeMaterial = new THREE.MeshLambertMaterial({color: 0x99EBFF});
@@ -234,8 +255,7 @@ Jump.prototype = {
             window.console.log(this.cubeList.shift());
         }
 
-
-        window.console.log(this.cubeList);
+        // window.console.log(this.cubeList);
         this.scene.add(cube);
     },
 
@@ -261,13 +281,23 @@ Jump.prototype = {
         this._jumper.add(this.jumperHead);
 
         this.scene.add(this._jumper);
+
+        this.jumperStatus.status = MoveStage.Waiting;
     },
 
     _mouseDown: function () {
-        window.console.log("DOWN");
+        // window.console.log("DOWN");
         var self = this;
 
-        self.jumperStatus.isReadyToJump = false;
+        if(self.jumperStatus.status !== MoveStage.Waiting){
+            window.console.log("Invalid Timing @ mouseDown");
+            return;
+        }
+
+        self.SwitchStage();
+        // window.console.log(this.jumperStatus.status);
+
+        self.jumperStatus.isReadyToJump = true;
         self.jumperStatus.potentialEnergy = 0;
 
         function act(){
@@ -285,17 +315,29 @@ Jump.prototype = {
     },
 
     _mouseUp: function () {
-        window.console.log("UP");
+        // window.console.log("UP");
         var self = this;
 
-        cancelAnimationFrame(self.mouseDownFrameHandler);
+        if(self.jumperStatus.status !== MoveStage.StoringEnergy ){
+            window.console.log("Invalid Timing @ mouseUp");
+            return;
+        }
+
+        self.SwitchStage();
+        // window.console.log(self.jumperStatus.status);
+
+        // cancelAnimationFrame(self.mouseDownFrameHandler);
         var frameHandler;
 
         function act() {
 
             self._jumperMove();
 
-            if (!self.jumperStatus.isReadyToJump && self.jumperBody.position.y > self.config.cubeSize.y || self.jumperStatus.potentialEnergy > 0){
+            //-0.1 用于消除误差
+            if (self.jumperBody.position.y > self.config.cubeSize.y - 0.1 || self.jumperBody.scale.y < 1){
+
+                window.console.log(self.jumperBody.position.y);
+                window.console.log(self.config.cubeSize.y);
 
                 self._jumperMove();
 
@@ -303,12 +345,48 @@ Jump.prototype = {
 
                 frameHandler = requestAnimationFrame(act);
             }else{
-                cancelAnimationFrame(frameHandler);
+                // cancelAnimationFrame(frameHandler);
+
+                self.Land();
                 self._adjustCamera();
                 self.UpdateCube();
             }
         }
         act();
+
+    },
+
+    Land: function(){
+        var self = this;
+
+        self.jumperBody.position.y = self.config.cubeSize.y;
+        self.jumperHead.position.y = self.config.cubeSize.y;
+
+        if (self.jumperStatus.status !== MoveStage.Moving){
+            window.console.log("Invalid Timing @ Land");
+            return;
+        }
+
+        self.SwitchStage();
+
+        if (self._isFall()){
+            self._jumperFall();
+        }else {
+            self._jumperLand();
+        }
+
+    },
+
+    _isFall: function(){
+        //TODO: Complete the judging logic
+        return false;
+    },
+
+    _jumperFall: function(){
+
+    },
+
+    _jumperLand: function(){
 
     },
 
@@ -334,7 +412,11 @@ Jump.prototype = {
         self.jumperHead.position.y += self.jumperStatus.potentialEnergy * self.config.heightUnit;
 
         self.jumperStatus.potentialEnergy -= self.config.potentialEnergyUnit;
-    }
+    },
+
+    SwitchStage: function(){
+        this.jumperStatus.status = this.jumperStatus.status === 2? 0: this.jumperStatus.status + 1;
+    },
 
 
 };
