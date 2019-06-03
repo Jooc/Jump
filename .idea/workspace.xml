@@ -44,8 +44,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Jump.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="249">
-                  <caret line="397" column="39" selection-start-line="397" selection-start-column="39" selection-end-line="397" selection-end-column="39" />
+                <state relative-caret-position="422">
+                  <caret line="166" column="77" selection-start-line="166" selection-start-column="77" selection-end-line="166" selection-end-column="77" />
                 </state>
               </provider>
             </entry>
@@ -62,8 +62,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/index.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="71">
-                  <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+                <state relative-caret-position="48">
+                  <caret line="16" column="54" lean-forward="true" selection-start-line="16" selection-start-column="54" selection-end-line="16" selection-end-column="54" />
                 </state>
               </provider>
             </entry>
@@ -71,8 +71,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Jump.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="8763">
-                  <caret line="425" selection-start-line="425" selection-end-line="425" />
+                <state relative-caret-position="9683">
+                  <caret line="474" selection-start-line="474" selection-end-line="474" />
                 </state>
               </provider>
             </entry>
@@ -115,9 +115,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="842" />
-    <option name="width" value="1725" />
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="1217" />
+    <option name="width" value="1352" />
     <option name="height" value="1398" />
   </component>
   <component name="ProjectView">
@@ -166,15 +166,16 @@
       <workItem from="1558890361442" duration="2701000" />
       <workItem from="1559320162118" duration="1361000" />
       <workItem from="1559358150345" duration="6163000" />
-      <workItem from="1559381885467" duration="6193000" />
+      <workItem from="1559381885467" duration="6964000" />
+      <workItem from="1559438603973" duration="4776000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="70667000" />
+    <option name="totallyTimeSpent" value="76214000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="674" y="0" width="1380" height="1118" extended-state="0" />
+    <frame x="974" y="0" width="1081" height="1118" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.2840028" />
@@ -234,8 +235,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Jump.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="397" column="39" selection-start-line="397" selection-start-column="39" selection-end-line="397" selection-end-column="39" />
+        <state relative-caret-position="422">
+          <caret line="166" column="77" selection-start-line="166" selection-start-column="77" selection-end-line="166" selection-end-column="77" />
         </state>
       </provider>
     </entry>
