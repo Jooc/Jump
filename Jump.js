@@ -1,7 +1,8 @@
 var MoveStage = {
     Waiting: 0,
     StoringEnergy: 1,
-    Moving: 2,
+    MovingJumper: 2,
+    MovingCamera: 3,
 };
 
 var Jump = function () {
@@ -14,14 +15,14 @@ var Jump = function () {
 
     this.config = {
         isMobile: false,
-        cameraRange: 30,
+        cameraRange: 20,
         background: 0x282828,
 
         potentialEnergyUnit: 0.05,
-        distanceUnit: 0.3,
-        heightUnit: 0.5,
+        distanceUnit: 0.5,
+        heightUnit: 0.75,
 
-        cameraMoveUnit: 0.05,
+        cameraMoveUnit: 0.35,
 
         jumperSize: {
           x: 1.5,
@@ -36,6 +37,8 @@ var Jump = function () {
         },
 
         maxDistance: 20,
+        minDistance: 10,
+
         maxCubeNum: 10,
     };
 
@@ -48,8 +51,6 @@ var Jump = function () {
     };
 
     this.cubeList = [];
-
-
 
     this.scene = new THREE.Scene();
 
@@ -133,19 +134,13 @@ Jump.prototype = {
     },
 
     _adjustCamera: function(){
-        window.console.log("adjusting Camera");
+        // window.console.log("adjusting Camera");
         var self = this;
 
-        if (self.jumperStatus.status !== MoveStage.Waiting){
+        if (self.jumperStatus.status !== MoveStage.MovingCamera){
             window.console.log("Invalid Timing @ adjusting Camera");
             return;
         }
-
-        var origin = {
-            x: self.camera.position.x,
-            y: self.camera.position.y,
-            z: self.camera.position.z,
-        };
 
         var target = {
             x: self.jumperBody.position.x - 100,
@@ -153,62 +148,79 @@ Jump.prototype = {
             z: self.jumperBody.position.z + 100,
         };
 
-        var direction = new THREE.Vector3(target.x - origin.x, target.y - origin.y, target.z - origin.z);
-
         var cameraMoveHandler;
+
+        window.console.log("moving Camera");
+        window.console.log(self.jumperStatus.lastDirection);
 
         cameraMove();
 
         function cameraMove() {
-            window.console.log("moving Camera");
-            window.console.log(self.jumperStatus.lastDirection);
 
             if (self.jumperStatus.lastDirection === 'straight'){
-                if (self.camera.position.x < self.jumperBody.position.x - 100) {
-                    self.camera.translateOnAxis(direction, self.config.cameraMoveUnit);
+                // window.console.log(self.camera.position.x);
+                // window.console.log(self.jumperBody.position.x);
+                // window.console.log(target.x);
+
+                if (self.camera.position.x !== target.x) {
+
+                    self.camera.position.x += self.config.cameraMoveUnit;
+
+                    if (target.x - self.camera.position.x < 0.25){
+                        self.camera.position.x = target.x;
+                    }
 
                     self.renderer.render(self.scene, self.camera);
                     cameraMoveHandler = requestAnimationFrame(cameraMove);
                 } else {
+                    window.console.log("canceling");
                     cancelAnimationFrame(cameraMoveHandler);
+
+                    self.SwitchStage();
+                    return;
                 }
             }else if (self.jumperStatus.lastDirection === 'left'){
-                if (self.camera.position.z > target.z) {
-                    self.camera.translateOnAxis(direction, self.config.cameraMoveUnit);
+                if (self.camera.position.z !== target.z) {
+
+                    self.camera.position.z -= self.config.cameraMoveUnit;
+
+                    if (self.camera.position.z - target.z < 0.25){
+                        self.camera.position.z = target.z;
+                    }
 
                     self.renderer.render(self.scene, self.camera);
                     cameraMoveHandler = requestAnimationFrame(cameraMove);
                 } else {
+                    window.console.log("canceling");
                     cancelAnimationFrame(cameraMoveHandler);
+
+                    self.SwitchStage();
+                    return;
                 }
             }else if (self.jumperStatus.lastDirection === 'right') {
-                if (self.camera.position.z < target.z) {
-                    self.camera.translateOnAxis(direction, self.config.cameraMoveUnit);
+                if (self.camera.position.z !== target.z) {
+
+                    self.camera.position.z += self.config.cameraMoveUnit;
+
+                    if (target.z - self.camera.position.z < 0.25){
+                        self.camera.position.z = target.z;
+                    }
 
                     self.renderer.render(self.scene, self.camera);
                     cameraMoveHandler = requestAnimationFrame(cameraMove);
                 } else {
+                    window.console.log("canceling");
                     cancelAnimationFrame(cameraMoveHandler);
+
+                    self.SwitchStage();
+                    return;
                 }
             }else{
                 window.console.log("Invalid Direction");
                 return;
             }
         }
-
-        // //TODO: NEVER STOP this handler
-        // if(self.camera.position.x !== target.x){
-        //     self.camera.translateOnAxis(direction, self.config.cameraMoveUnit);
-        //
-        //     self.renderer.render(self.scene, self.camera);
-        //     cameraMoveHandler = requestAnimationFrame(function () {
-        //         self._adjustCamera();
-        //     })
-        // }else{
-        //     cancelAnimationFrame(cameraMoveHandler);
-        // }
     },
-
 
 
     // /**
@@ -220,6 +232,9 @@ Jump.prototype = {
     // },
 
     UpdateCube: function(){
+
+        window.console.log("Updating Cube");
+
         //TO INIT
         if (this.cubeList.length === 0){
             this._createCube(0, 0, 0);
@@ -228,6 +243,7 @@ Jump.prototype = {
         //TO Update
 
         var direction = this._getDirection();
+        this.jumperStatus.lastDirection = this.jumperStatus.currentDirection;
         this.jumperStatus.currentDirection = direction;
 
         var currentCube = this.cubeList[this.cubeList.length-1];
@@ -242,11 +258,11 @@ Jump.prototype = {
 
         //DONE: TEST the direction
         if (direction === 'left'){
-            nextCubePosition.z -= this.config.maxDistance * Math.random() + this.config.cubeSize.x;
+            nextCubePosition.z -= this.config.maxDistance * Math.random() + this.config.minDistance;
         }else if (direction === 'right'){
-            nextCubePosition.z += this.config.maxDistance * Math.random() + this.config.cubeSize.x;
+            nextCubePosition.z += this.config.maxDistance * Math.random() + this.config.minDistance;
         }else{
-            nextCubePosition.x += this.config.maxDistance * Math.random() + this.config.cubeSize.x;
+            nextCubePosition.x += this.config.maxDistance * Math.random() + this.config.minDistance;
         }
 
         this._createCube(nextCubePosition.x, nextCubePosition.y, nextCubePosition.z)
@@ -282,7 +298,7 @@ Jump.prototype = {
     },
 
     _createCube: function(coordinateX, coordinateY, coordinateZ){
-        // window.console.log("Creating Cube");
+        window.console.log("Creating Cube");
 
         var cubeGeometry = new THREE.BoxGeometry(this.config.cubeSize.x,this.config.cubeSize.y, this.config.cubeSize.z);
         var cubeMaterial = new THREE.MeshLambertMaterial({color: 0x99EBFF});
@@ -366,7 +382,6 @@ Jump.prototype = {
     _mouseUp: function () {
         // window.console.log("UP");
         var self = this;
-        var totalEnergy = self.jumperStatus.potentialEnergy;
 
         if(self.jumperStatus.status !== MoveStage.StoringEnergy ){
             window.console.log("Invalid Timing @ mouseUp");
@@ -379,14 +394,16 @@ Jump.prototype = {
         cancelAnimationFrame(self.mouseDownFrameHandler);
         var frameHandler;
 
+        act();
+
         function act() {
             //-0.1 用于消除误差
             // if (self.jumperBody.position.y > self.config.cubeSize.y || self.jumperStatus.potentialEnergy > 0){
             if (self.jumperBody.scale.y < 1){
 
-                window.console.log(self.jumperBody.position.y);
-                window.console.log(self.jumperBody.scale.y);
-                window.console.log("energy:" + self.jumperStatus.potentialEnergy);
+                // window.console.log(self.jumperBody.position.y);
+                // window.console.log(self.jumperBody.scale.y);
+                // window.console.log("energy:" + self.jumperStatus.potentialEnergy);
 
                 self._jumperMove();
 
@@ -397,12 +414,12 @@ Jump.prototype = {
                 cancelAnimationFrame(frameHandler);
 
                 self.Land();
-                self._adjustCamera();
                 self.UpdateCube();
+                self._adjustCamera();
             }
         }
-        act();
 
+        window.console.log("################");
     },
 
     Land: function(){
@@ -411,7 +428,7 @@ Jump.prototype = {
         self.jumperBody.position.y = self.config.cubeSize.y;
         self.jumperHead.position.y = self.config.cubeSize.y;
 
-        if (self.jumperStatus.status !== MoveStage.Moving){
+        if (self.jumperStatus.status !== MoveStage.MovingJumper){
             window.console.log("Invalid Timing @ Land");
             return;
         }
@@ -427,16 +444,31 @@ Jump.prototype = {
     },
 
     _isFall: function(){
-        //TODO: Complete the judging logic
-        return false;
+        //DONE: Complete the judging logic
+
+        var self = this;
+
+        // window.console.log(self.jumperBody.position.x - self.cubeList[self.cubeList.length - 1].position.x);
+        // window.console.log(Math.abs(self.jumperBody.position.z - self.cubeList[self.cubeList.length - 1].position.z));
+
+        if (Math.abs(self.jumperBody.position.x - self.cubeList[self.cubeList.length - 1].position.x) < self.config.cubeSize.x / 2
+            && Math.abs(self.jumperBody.position.z - self.cubeList[self.cubeList.length - 1].position.z) < self.config.cubeSize.z / 2){
+            return false;
+        }
+
+        return true;
     },
 
     _jumperFall: function(){
+        window.console.log("FALL");
 
+        //TODO:旋转并下落
     },
 
     _jumperLand: function(){
+        window.console.log("LAND");
 
+        var self = this;
     },
 
     _jumperMove: function () {
@@ -464,7 +496,7 @@ Jump.prototype = {
     },
 
     SwitchStage: function(){
-        this.jumperStatus.status = this.jumperStatus.status === 2? 0: this.jumperStatus.status + 1;
+        this.jumperStatus.status = this.jumperStatus.status === 3? 0: this.jumperStatus.status + 1;
     },
 
 
