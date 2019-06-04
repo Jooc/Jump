@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7d1b6c8b-5f27-4396-bd00-36a5691eba63" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Jump.js" beforeDir="false" afterPath="$PROJECT_DIR$/Jump.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -44,8 +43,20 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Jump.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="448">
-                  <caret line="454" column="133" selection-start-line="454" selection-start-column="133" selection-end-line="454" selection-end-column="133" />
+                <state relative-caret-position="414">
+                  <caret line="788" column="51" selection-start-line="788" selection-start-column="51" selection-end-line="788" selection-end-column="51" />
+                  <folding>
+                    <element signature="e#12069#12176#0" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/lib.es5.d.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="142">
+                  <caret line="618" column="13" selection-start-line="618" selection-start-column="13" selection-end-line="618" selection-end-column="13" />
                 </state>
               </provider>
             </entry>
@@ -72,7 +83,7 @@
             <entry file="file://$PROJECT_DIR$/Jump.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="7650">
-                  <caret line="502" selection-start-line="502" selection-end-line="502" />
+                  <caret line="800" selection-start-line="800" selection-end-line="800" />
                 </state>
               </provider>
             </entry>
@@ -94,11 +105,15 @@
     <findStrings>
       <find>100</find>
       <find>this</find>
+      <find>'right'</find>
+      <find>Current</find>
+      <find>window.console.log</find>
     </findStrings>
     <replaceStrings>
       <replace>this.</replace>
       <replace>cameraRange</replace>
       <replace>self</replace>
+      <replace>Direction.Right</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -172,7 +187,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="81967000" />
+    <option name="totallyTimeSpent" value="97161000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -226,6 +241,13 @@
     <entry file="file://$PROJECT_DIR$/lib/three.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/lib.es5.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="618" column="13" selection-start-line="618" selection-start-column="13" selection-end-line="618" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
@@ -235,8 +257,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Jump.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="448">
-          <caret line="454" column="133" selection-start-line="454" selection-start-column="133" selection-end-line="454" selection-end-column="133" />
+        <state relative-caret-position="414">
+          <caret line="788" column="51" selection-start-line="788" selection-start-column="51" selection-end-line="788" selection-end-column="51" />
+          <folding>
+            <element signature="e#12069#12176#0" />
+          </folding>
         </state>
       </provider>
     </entry>
