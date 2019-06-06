@@ -14,8 +14,10 @@ body{
     top: 50px;
 }
 
-.content p{
+.content h1{
     color: #3b3b3b;
     font-size: 1.5rem;
     font-weight: lighter;
+
+    max-lines: 1;
 }

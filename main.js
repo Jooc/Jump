@@ -17,7 +17,7 @@ function success(currentScore) {
 
     var content = document.getElementsByClassName('content')[0];
     window.console.log(content[0]);
-    content.innerHTML = `<p> Score: ${currentScore} </p>`;
+    content.innerHTML = "<h1>Score:" + currentScore + "</h1>";
 }
 
 function fail() {

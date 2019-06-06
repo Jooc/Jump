@@ -592,16 +592,16 @@ Jump.prototype = {
                 self.jumperBody.position.y += self.config.heightUnit * self.jumperStatus.potentialEnergy;
                 self.jumperHead.position.y += self.config.heightUnit * self.jumperStatus.potentialEnergy;
 
-                if (self.jumperStatus.currentDirection === Direction.Straight){
-                    self.jumperBody.position.x += self.config.distanceUnit;
-                    self.jumperHead.position.x += self.config.distanceUnit;
-                }else if (self.jumperStatus.currentDirection === Direction.Left){
-                    self.jumperBody.position.z -= self.config.distanceUnit;
-                    self.jumperHead.position.z -= self.config.distanceUnit;
-                }else if (self.jumperStatus.currentDirection === Direction.Right){
-                    self.jumperBody.position.z += self.config.distanceUnit;
-                    self.jumperHead.position.z += self.config.distanceUnit;
-                }
+                // if (self.jumperStatus.currentDirection === Direction.Straight){
+                //     self.jumperBody.position.x += self.config.distanceUnit;
+                //     self.jumperHead.position.x += self.config.distanceUnit;
+                // }else if (self.jumperStatus.currentDirection === Direction.Left){
+                //     self.jumperBody.position.z -= self.config.distanceUnit;
+                //     self.jumperHead.position.z -= self.config.distanceUnit;
+                // }else if (self.jumperStatus.currentDirection === Direction.Right){
+                //     self.jumperBody.position.z += self.config.distanceUnit;
+                //     self.jumperHead.position.z += self.config.distanceUnit;
+                // }
 
                 self.renderer.render(self.scene, self.camera);
 
