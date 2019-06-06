@@ -6,11 +6,11 @@ var MoveStage = {
 };
 
 var LandType = {
-    //0: 落在当前方块内
-    //1: 落在当前方块的边缘（不稳
-    //2: 落在下一方块内部
-    //3: 落在下一方块的边缘 (不稳
-    //4: 直接跌落
+    //InCurrent: 落在当前方块内
+    //OnEdgeOfCurrent: 落在当前方块的边缘（不稳
+    //InNext: 落在下一方块内部
+    //OnEdgeOfNext: 落在下一方块的边缘 (不稳
+    //OutSide: 直接跌落
 
     InCurrent: 'inCurrent',
     OnEdgeOfCurrent: 'OnEdgeOfCurrent',
@@ -26,8 +26,6 @@ var Direction = {
 };
 
 var Jump = function () {
-    console.log("123");
-
     this.score = 0;
 
     this.size = {
@@ -137,17 +135,47 @@ Jump.prototype = {
         };
 
         var canvas = document.querySelector('canvas');
+
         canvas.addEventListener(mouseEvents.down, function () {
             self._mouseDown();
         });
         canvas.addEventListener(mouseEvents.up, function () {
             self._mouseUp();
         });
+        canvas.addEventListener('resize', function () {
+            self._windowResize();
+        })
+    },
+
+    RestartHandler: function(func){
+        this.restartCallback = func;
+    },
+
+    SuccessHandler: function(func){
+        window.console.log("Adding Success");
+        this.successCallback = func;
+    },
+
+    FailHandler: function(func){
+        window.console.log("Adding Fail");
+        this.failCallback = func;
+    },
+
+    _windowResize: function(){
+        this.camera.left = window.innerWidth / -80;
+        this.camera.right = window.innerWidth / 80;
+        this.camera.top = window.innerHeight / 80;
+        this.camera.bottom = window.innerHeight / -80;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+
+        this.renderer.render(this.scene, this.camera);
     },
 
     _checkUserAgent: function () {
-        var n = navigator.userAgent;
-        if (n.match(/Android/i) || n.match(/webOS/i) || n.match(/iPhone/i) || n.match(/iPad/i) || n.match(/iPod/i) || n.match(/BlackBerry/i)){
+        var env = navigator.userAgent;
+        if (env.match(/Android/i) || env.match(/webOS/i) || env.match(/iPhone/i) ||
+            env.match(/iPad/i) || env.match(/iPod/i) || env.match(/BlackBerry/i)) {
             this.config.isMobile = true
         }
     },
@@ -156,6 +184,7 @@ Jump.prototype = {
         this.camera.position.x = -100;
         this.camera.position.y = 125;
         this.camera.position.z = 100;
+
         this.camera.lookAt(this.scene.position);
     },
 
@@ -756,6 +785,10 @@ Jump.prototype = {
         var self = this;
 
         self.score += 1;
+
+        if(self.successCallback){
+            self.successCallback(self.score);
+        }
     },
 
     _jumperMove: function () {
@@ -787,6 +820,11 @@ Jump.prototype = {
 
         window.console.log("Game Over");
         window.console.log("Score: " + self.score);
+
+        window.console.log(self.failCallback);
+        if(self.failCallback) {
+            self.failCallback();
+        }
     },
 
     SwitchStage: function(){
