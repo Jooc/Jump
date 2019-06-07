@@ -92,7 +92,11 @@ var Jump = function () {
     this.scene.add(axes);
 
     var planeGeometry = new THREE.PlaneGeometry(this.size.width, this.size.height);
+<<<<<<< HEAD
     var planeMaterial = new THREE.MeshBasicMaterial({color: 0xcccccc});
+=======
+    var planeMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+>>>>>>> parent of 3bdcdf3... 6.7_2
     var plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
     plane.rotation.x = -0.5*Math.PI;

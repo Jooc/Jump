@@ -2,11 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7d1b6c8b-5f27-4396-bd00-36a5691eba63" name="Default Changelist" comment="">
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Jump.js" beforeDir="false" afterPath="$PROJECT_DIR$/Jump.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/main.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/main.css" afterDir="false" />
+>>>>>>> parent of 3bdcdf3... 6.7_2
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -20,6 +25,7 @@
   <component name="FileEditorManager">
     <splitter split-orientation="vertical" split-proportion="0.7768763">
       <split-first>
+<<<<<<< HEAD
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/index.html">
@@ -63,6 +69,63 @@
             </entry>
           </file>
         </leaf>
+=======
+        <splitter split-orientation="horizontal" split-proportion="0.42917547">
+          <split-first>
+            <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+              <file pinned="false" current-in-tab="true">
+                <entry file="file://$PROJECT_DIR$/index.html">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state relative-caret-position="241">
+                      <caret line="14" column="6" lean-forward="true" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+              <file pinned="false" current-in-tab="false">
+                <entry file="file://$PROJECT_DIR$/main.css">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state relative-caret-position="535">
+                      <caret line="68" column="1" selection-start-line="68" selection-start-column="1" selection-end-line="68" selection-end-column="1" />
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+            </leaf>
+          </split-first>
+          <split-second>
+            <leaf>
+              <file pinned="false" current-in-tab="true">
+                <entry file="file://$PROJECT_DIR$/main.css">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state relative-caret-position="216">
+                      <caret line="13" column="14" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="14" />
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+              <file pinned="false" current-in-tab="false">
+                <entry file="file://$PROJECT_DIR$/Jump.js">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state relative-caret-position="568">
+                      <caret line="131" column="37" selection-start-line="131" selection-start-column="37" selection-end-line="131" selection-end-column="37" />
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+              <file pinned="false" current-in-tab="false">
+                <entry file="file://$PROJECT_DIR$/main.js">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state relative-caret-position="126">
+                      <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+            </leaf>
+          </split-second>
+        </splitter>
+>>>>>>> parent of 3bdcdf3... 6.7_2
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -78,8 +141,13 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Jump.js">
               <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
                 <state relative-caret-position="10902">
                   <caret line="838" selection-start-line="838" selection-end-line="838" />
+=======
+                <state relative-caret-position="15084">
+                  <caret line="875" selection-start-line="875" selection-end-line="875" />
+>>>>>>> parent of 3bdcdf3... 6.7_2
                 </state>
               </provider>
             </entry>
@@ -120,10 +188,14 @@
       <list>
         <option value="$PROJECT_DIR$/index.css" />
         <option value="$PROJECT_DIR$/lib/three.js" />
+<<<<<<< HEAD
+=======
+        <option value="$PROJECT_DIR$/main.js" />
+        <option value="$PROJECT_DIR$/Jump.js" />
+>>>>>>> parent of 3bdcdf3... 6.7_2
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/main.js" />
         <option value="$PROJECT_DIR$/main.css" />
-        <option value="$PROJECT_DIR$/Jump.js" />
       </list>
     </option>
   </component>
@@ -182,11 +254,19 @@
       <workItem from="1559438603973" duration="4776000" />
       <workItem from="1559786999585" duration="4708000" />
       <workItem from="1559826017862" duration="2074000" />
+<<<<<<< HEAD
+=======
+      <workItem from="1559873429267" duration="7793000" />
+>>>>>>> parent of 3bdcdf3... 6.7_2
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="105137000" />
+=======
+    <option name="totallyTimeSpent" value="111978000" />
+>>>>>>> parent of 3bdcdf3... 6.7_2
   </component>
   <component name="ToolWindowManager">
     <frame x="814" y="0" width="1241" height="1118" extended-state="0" />
@@ -251,10 +331,17 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="437">
           <caret line="19" column="28" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
+=======
+    <entry file="file://$PROJECT_DIR$/Jump.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="568">
+          <caret line="131" column="37" selection-start-line="131" selection-start-column="37" selection-end-line="131" selection-end-column="37" />
+>>>>>>> parent of 3bdcdf3... 6.7_2
         </state>
       </provider>
     </entry>
@@ -265,10 +352,17 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="71">
           <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+=======
+    <entry file="file://$PROJECT_DIR$/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="13" column="14" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="14" />
+>>>>>>> parent of 3bdcdf3... 6.7_2
         </state>
       </provider>
     </entry>
