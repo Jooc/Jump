@@ -43,7 +43,7 @@ var Jump = function () {
         heightUnit: 0.75,
         rotationUnit: 0.1,
 
-        cameraMoveUnit: 0.35,
+        cameraMoveUnit: 0.5,
 
         jumperSize: {
           x: 1.5,
@@ -60,7 +60,7 @@ var Jump = function () {
         maxDistance: 20,
         minDistance: 15,
 
-        maxCubeNum: 10,
+        maxCubeNum: 2,
     };
 
     this.jumperStatus = {
@@ -92,7 +92,7 @@ var Jump = function () {
     // this.scene.add(axes);
 
     var planeGeometry = new THREE.PlaneGeometry(this.size.width, this.size.height);
-    var planeMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+    var planeMaterial = new THREE.MeshBasicMaterial({color: "#cbcbcb"});
     var plane = new THREE.Mesh(planeGeometry, planeMaterial);
     plane.receiveShadow = true;
 
@@ -109,12 +109,12 @@ var Jump = function () {
 
     // this.scene.add(spotLight);
 
-    var ambiColor = "#ffffff";
+    var ambiColor = "#cccccc";
     var ambientLight = new THREE.AmbientLight(ambiColor);
 
     this.scene.add(ambientLight);
 
-    var direColor = "#ffffff";
+    var direColor = "#c0c0c0";
     var directionalLight = new THREE.DirectionalLight(direColor);
     directionalLight.position.set(40, 60, 10);
     directionalLight.castShadow = true;
@@ -382,6 +382,8 @@ Jump.prototype = {
 
         var cubeGeometry = new THREE.BoxGeometry(this.config.cubeSize.x,this.config.cubeSize.y, this.config.cubeSize.z);
         var cubeMaterial = new THREE.MeshLambertMaterial({color: "#404040"});
+        // var randomColor = this.RandomColor();
+        // var cubeMaterial = new THREE.MeshLambertMaterial({color: randomColor});
 
         cubeGeometry.translate(0, this.config.cubeSize.y/2, 0);
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
@@ -405,7 +407,7 @@ Jump.prototype = {
 
     _createJumper: function(){
         var self = this;
-        var material = new THREE.MeshLambertMaterial({color: 0x282828});
+        var material = new THREE.MeshLambertMaterial({color: "#282828"});
         var bodyGeometry = new THREE.CylinderGeometry(1, 1.5, 6, 64, 64);
         bodyGeometry.translate(0, 3, 0);
 
@@ -435,6 +437,7 @@ Jump.prototype = {
         var self = this;
 
         if(self.jumperStatus.status !== MoveStage.Waiting){
+            window.console.log(self.jumperStatus.status);
             window.console.log("Invalid Timing @ mouseDown");
             return;
         }
@@ -519,6 +522,7 @@ Jump.prototype = {
 
         switch (self._whereIsJumper()) {
             case LandType.InCurrent:
+                self._adjustCamera();
                 break;
             case LandType.OnEdgeOfCurrent:
                 self._jumperFall(LandType.OnEdgeOfCurrent);
@@ -867,6 +871,12 @@ Jump.prototype = {
     SwitchStage: function(){
         this.jumperStatus.status = this.jumperStatus.status === 3? 0: this.jumperStatus.status + 1;
     },
+
+    RandomColor: function () {
+        var appropriateRGB = Math.random()*7829367+ 5592405;
+        var color = '#'+ Math.floor(appropriateRGB).toString(16);
+        return color;
+    }
 
 
 };
