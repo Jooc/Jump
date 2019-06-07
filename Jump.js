@@ -35,7 +35,7 @@ var Jump = function () {
 
     this.config = {
         isMobile: false,
-        cameraRange: 20,
+        cameraRange: 30,
         background: 0x282828,
 
         potentialEnergyUnit: 0.05,
@@ -58,7 +58,7 @@ var Jump = function () {
         },
 
         maxDistance: 20,
-        minDistance: 10,
+        minDistance: 15,
 
         maxCubeNum: 10,
     };
@@ -81,22 +81,18 @@ var Jump = function () {
         this.size.height/this.config.cameraRange, this.size.height/(-1 * this.config.cameraRange),
         0, 5000);
 
-    this.renderer = new THREE.WebGLRenderer({antialias: true});
+    this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
     this.renderer.setClearColor(new THREE.Color(0xEEEEEE));
     this.renderer.setSize(this.size.width, this.size.height);
     this.renderer.shadowMap.enabled = true;
 
     document.getElementById("Main-Container").appendChild(this.renderer.domElement);
 
-    var axes = new THREE.AxesHelper(20);
-    this.scene.add(axes);
+    // var axes = new THREE.AxesHelper(20);
+    // this.scene.add(axes);
 
     var planeGeometry = new THREE.PlaneGeometry(this.size.width, this.size.height);
-<<<<<<< HEAD
-    var planeMaterial = new THREE.MeshBasicMaterial({color: 0xcccccc});
-=======
-    var planeMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
->>>>>>> parent of 3bdcdf3... 6.7_2
+    var planeMaterial = new THREE.MeshBasicMaterial({color: '#dedede'});
     var plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
     plane.rotation.x = -0.5*Math.PI;
@@ -106,19 +102,19 @@ var Jump = function () {
 
     this.scene.add(plane);
 
-    var spotLight = new THREE.SpotLight(0xffffff);
-    spotLight.position.set(-40, 60, -10);
-    spotLight.castShadow = true;
-
-    this.scene.add(spotLight);
+    // var spotLight = new THREE.SpotLight(0xffffff);
+    // spotLight.position.set(-40, 60, -10);
+    // spotLight.castShadow = true;
+    //
+    // this.scene.add(spotLight);
     // this.scene.add(spotLight);
 
-    var ambiColor = "#ffffff";
+    var ambiColor = "#d5d5d5";
     var ambientLight = new THREE.AmbientLight(ambiColor);
 
     this.scene.add(ambientLight);
 
-    var direColor = "#ffffff";
+    var direColor = "#9a9a9a";
     var directionalLight = new THREE.DirectionalLight(direColor);
     directionalLight.position.set(40, 60, 10);
     directionalLight.castShadow = true;
@@ -845,15 +841,21 @@ Jump.prototype = {
         self.jumperStatus.potentialEnergy -= self.config.potentialEnergyUnit;
     },
 
+    Restart: function(){
+        window.console.log("Game Restart");
+
+        window.location.reload();
+    },
+
     GameOver: function(){
         var self = this;
 
         window.console.log("Game Over");
         window.console.log("Score: " + self.score);
 
-        window.console.log(self.failCallback);
+        // window.console.log(self.failCallback);
         if(self.failCallback) {
-            self.failCallback();
+            self.failCallback(self.score);
         }
     },
 

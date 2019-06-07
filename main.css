@@ -1,5 +1,5 @@
 *{
-    font-family: 微软雅黑, serif;
+    font-family: 微软雅黑;
 }
 
 body{
@@ -7,17 +7,61 @@ body{
     overflow: hidden;
 }
 
-.content{
+#gaming-content{
     position: absolute;
-    left: 50%;
-    right: 50%;
     top: 50px;
+    width: 100%;
+    text-align: center;
 }
 
-.content h1{
-    color: #3b3b3b;
+#gaming-content p{
+    color: #4c4c4c;
     font-size: 1.5rem;
     font-weight: lighter;
+    /*font-weight: lighter;*/
+}
 
-    max-lines: 1;
+#final-cover{
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+}
+#final-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    height: 500px;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.4);
+    border: 5px solid rgba(255,255,255,0.05);
+}
+#final-score-container{
+    color: #ffffff;
+    text-align: center;
+}
+#title{
+    font-size: 20px;
+    font-weight: bold;
+}
+#final-score{
+    font-size: 100px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+#restart{
+    width: 200px;
+    height: 40px;
+    border-radius: 20px;
+    background: white;
+    border: none;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
 }
