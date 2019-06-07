@@ -9,15 +9,16 @@ body{
 
 #gaming-content{
     position: absolute;
-    margin-left: 50%;
-    margin-right: auto;
     top: 50px;
+    width: 100%;
+    text-align: center;
 }
 
 #gaming-content p{
     color: #4c4c4c;
     font-size: 1.5rem;
     /*font-weight: lighter;*/
+    width: auto;
 }
 
 #final-cover{
@@ -65,7 +66,4 @@ body{
     font-weight: bold;
     font-size: 20px;
     cursor: pointer;
-}
-#restart:hover{
-    color:#232323;
 }
