@@ -43,7 +43,7 @@ var Jump = function () {
         heightUnit: 0.75,
         rotationUnit: 0.1,
 
-        cameraMoveUnit: 0.35,
+        cameraMoveUnit: 0.5,
 
         jumperSize: {
           x: 1.5,
@@ -520,6 +520,7 @@ Jump.prototype = {
 
         switch (self._whereIsJumper()) {
             case LandType.InCurrent:
+                self._adjustCamera();
                 break;
             case LandType.OnEdgeOfCurrent:
                 self._jumperFall(LandType.OnEdgeOfCurrent);
