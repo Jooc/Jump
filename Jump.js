@@ -35,7 +35,7 @@ var Jump = function () {
 
     this.config = {
         isMobile: false,
-        cameraRange: 20,
+        cameraRange: 30,
         background: 0x282828,
 
         potentialEnergyUnit: 0.05,
@@ -58,7 +58,7 @@ var Jump = function () {
         },
 
         maxDistance: 20,
-        minDistance: 10,
+        minDistance: 15,
 
         maxCubeNum: 10,
     };
@@ -81,19 +81,20 @@ var Jump = function () {
         this.size.height/this.config.cameraRange, this.size.height/(-1 * this.config.cameraRange),
         0, 5000);
 
-    this.renderer = new THREE.WebGLRenderer({antialias: true});
+    this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
     this.renderer.setClearColor(new THREE.Color(0xEEEEEE));
     this.renderer.setSize(this.size.width, this.size.height);
     this.renderer.shadowMap.enabled = true;
 
     document.getElementById("Main-Container").appendChild(this.renderer.domElement);
 
-    var axes = new THREE.AxesHelper(20);
-    this.scene.add(axes);
+    // var axes = new THREE.AxesHelper(20);
+    // this.scene.add(axes);
 
     var planeGeometry = new THREE.PlaneGeometry(this.size.width, this.size.height);
-    var planeMaterial = new THREE.MeshBasicMaterial({color: 0xcccccc});
+    var planeMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
     var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    plane.receiveShadow = true;
 
     plane.rotation.x = -0.5*Math.PI;
     plane.position.x = 15;
@@ -106,7 +107,31 @@ var Jump = function () {
     spotLight.position.set(-40, 60, -10);
     spotLight.castShadow = true;
 
-    this.scene.add(spotLight);
+    // this.scene.add(spotLight);
+
+    var ambiColor = "#ffffff";
+    var ambientLight = new THREE.AmbientLight(ambiColor);
+
+    this.scene.add(ambientLight);
+
+    var direColor = "#ffffff";
+    var directionalLight = new THREE.DirectionalLight(direColor);
+    directionalLight.position.set(40, 60, 10);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.camera.near = 2;
+    directionalLight.shadow.camera.far = 200;
+    directionalLight.shadow.camera.left = -50;
+    directionalLight.shadow.camera.right = 50;
+    directionalLight.shadow.camera.top = 50;
+    directionalLight.shadow.camera.bottom = -50;
+
+
+    directionalLight.distance = 0;
+    directionalLight.intensity = 0.5;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
+
+    this.scene.add(directionalLight);
 };
 
 
@@ -232,7 +257,7 @@ Jump.prototype = {
                     cancelAnimationFrame(cameraMoveHandler);
 
                     self.SwitchStage();
-                    return;
+
                 }
             }else if (self.jumperStatus.lastDirection === Direction.Left){
                 if (self.camera.position.z !== target.z) {
@@ -250,7 +275,7 @@ Jump.prototype = {
                     cancelAnimationFrame(cameraMoveHandler);
 
                     self.SwitchStage();
-                    return;
+
                 }
             }else if (self.jumperStatus.lastDirection === Direction.Right) {
                 if (self.camera.position.z !== target.z) {
@@ -268,11 +293,11 @@ Jump.prototype = {
                     cancelAnimationFrame(cameraMoveHandler);
 
                     self.SwitchStage();
-                    return;
+
                 }
             }else{
                 window.console.log("Invalid Direction");
-                return;
+
             }
         }
     },
@@ -356,7 +381,7 @@ Jump.prototype = {
         // window.console.log("Creating Cube");
 
         var cubeGeometry = new THREE.BoxGeometry(this.config.cubeSize.x,this.config.cubeSize.y, this.config.cubeSize.z);
-        var cubeMaterial = new THREE.MeshLambertMaterial({color: 0x99EBFF});
+        var cubeMaterial = new THREE.MeshLambertMaterial({color: "#404040"});
 
         cubeGeometry.translate(0, this.config.cubeSize.y/2, 0);
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
@@ -511,12 +536,19 @@ Jump.prototype = {
             case LandType.OutSide:
                 // self._jumperFallingRotate('StraightCloser');
                 self._jumperFallStraightly();
+                // self._sleep(1000);
                 self.GameOver();
                 break;
         }
 
     },
 
+    // _sleep: function(delay) {
+    //     var start = (new Date()).getTime();
+    //     while ((new Date()).getTime() - start < delay) {
+    //         continue;
+    //     }
+    // },
 
     _whereIsJumper: function(){
 
@@ -592,16 +624,16 @@ Jump.prototype = {
                 self.jumperBody.position.y += self.config.heightUnit * self.jumperStatus.potentialEnergy;
                 self.jumperHead.position.y += self.config.heightUnit * self.jumperStatus.potentialEnergy;
 
-                if (self.jumperStatus.currentDirection === Direction.Straight){
-                    self.jumperBody.position.x += self.config.distanceUnit;
-                    self.jumperHead.position.x += self.config.distanceUnit;
-                }else if (self.jumperStatus.currentDirection === Direction.Left){
-                    self.jumperBody.position.z -= self.config.distanceUnit;
-                    self.jumperHead.position.z -= self.config.distanceUnit;
-                }else if (self.jumperStatus.currentDirection === Direction.Right){
-                    self.jumperBody.position.z += self.config.distanceUnit;
-                    self.jumperHead.position.z += self.config.distanceUnit;
-                }
+                // if (self.jumperStatus.currentDirection === Direction.Straight){
+                //     self.jumperBody.position.x += self.config.distanceUnit;
+                //     self.jumperHead.position.x += self.config.distanceUnit;
+                // }else if (self.jumperStatus.currentDirection === Direction.Left){
+                //     self.jumperBody.position.z -= self.config.distanceUnit;
+                //     self.jumperHead.position.z -= self.config.distanceUnit;
+                // }else if (self.jumperStatus.currentDirection === Direction.Right){
+                //     self.jumperBody.position.z += self.config.distanceUnit;
+                //     self.jumperHead.position.z += self.config.distanceUnit;
+                // }
 
                 self.renderer.render(self.scene, self.camera);
 
@@ -666,7 +698,6 @@ Jump.prototype = {
 
     _jumperFallingRotate: function(relativePos){
         var self = this;
-        var axis;
 
         window.console.log("Rotating");
         window.console.log(self.jumperBody.rotation['z']/Math.PI);
@@ -821,10 +852,16 @@ Jump.prototype = {
         window.console.log("Game Over");
         window.console.log("Score: " + self.score);
 
-        window.console.log(self.failCallback);
+        // window.console.log(self.failCallback);
         if(self.failCallback) {
-            self.failCallback();
+            self.failCallback(self.score);
         }
+    },
+
+    Restart: function(){
+        window.console.log("Game Restart");
+
+        window.location.reload();
     },
 
     SwitchStage: function(){
