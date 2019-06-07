@@ -107,6 +107,31 @@ var Jump = function () {
     spotLight.castShadow = true;
 
     this.scene.add(spotLight);
+    // this.scene.add(spotLight);
+
+    var ambiColor = "#ffffff";
+    var ambientLight = new THREE.AmbientLight(ambiColor);
+
+    this.scene.add(ambientLight);
+
+    var direColor = "#ffffff";
+    var directionalLight = new THREE.DirectionalLight(direColor);
+    directionalLight.position.set(40, 60, 10);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.camera.near = 2;
+    directionalLight.shadow.camera.far = 200;
+    directionalLight.shadow.camera.left = -50;
+    directionalLight.shadow.camera.right = 50;
+    directionalLight.shadow.camera.top = 50;
+    directionalLight.shadow.camera.bottom = -50;
+
+
+    directionalLight.distance = 0;
+    directionalLight.intensity = 0.5;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
+
+    this.scene.add(directionalLight);
 };
 
 
@@ -357,6 +382,7 @@ Jump.prototype = {
 
         var cubeGeometry = new THREE.BoxGeometry(this.config.cubeSize.x,this.config.cubeSize.y, this.config.cubeSize.z);
         var cubeMaterial = new THREE.MeshLambertMaterial({color: 0x99EBFF});
+        var cubeMaterial = new THREE.MeshLambertMaterial({color: "#404040"});
 
         cubeGeometry.translate(0, this.config.cubeSize.y/2, 0);
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
