@@ -38,7 +38,7 @@ var Jump = function () {
         cameraRange: 30,
         background: 0x282828,
 
-        potentialEnergyUnit: 0.05,
+        // PotentialEnergyUnit: 0.05,
         distanceUnit: 0.5,
         heightUnit: 0.75,
         rotationUnit: 0.1,
@@ -132,6 +132,18 @@ var Jump = function () {
     directionalLight.shadow.mapSize.height = 1024;
 
     this.scene.add(directionalLight);
+
+    this.controls = new function () {
+        this.PotentialEnergyUnit = 0.05;
+        this.DistanceUnit = 0.5;
+        this.HeightUnit = 0.75;
+    };
+
+    var gui = new dat.GUI();
+    // gui.add(this.controls, 'PotentialEnergyUnit', 0, 0.1);
+    gui.add(this.controls, 'DistanceUnit', 0, 1);
+    gui.add(this.controls, 'HeightUnit', 0, 1.5);
+
 };
 
 
@@ -453,7 +465,7 @@ Jump.prototype = {
 
                 self.mouseDownFrameHandler = requestAnimationFrame(act);
 
-                self.jumperStatus.potentialEnergy += self.config.potentialEnergyUnit;
+                self.jumperStatus.potentialEnergy += self.controls.PotentialEnergyUnit;
             }
             self.renderer.render(self.scene, self.camera);
         }
@@ -616,18 +628,18 @@ Jump.prototype = {
         function act() {
 
             if (self.jumperBody.position.y > 0){
-                self.jumperBody.position.y += self.config.heightUnit * self.jumperStatus.potentialEnergy;
-                self.jumperHead.position.y += self.config.heightUnit * self.jumperStatus.potentialEnergy;
+                self.jumperBody.position.y += self.controls.HeightUnit * self.jumperStatus.potentialEnergy;
+                self.jumperHead.position.y += self.controls.HeightUnit * self.jumperStatus.potentialEnergy;
 
                 // if (self.jumperStatus.currentDirection === Direction.Straight){
-                //     self.jumperBody.position.x += self.config.distanceUnit;
-                //     self.jumperHead.position.x += self.config.distanceUnit;
+                //     self.jumperBody.position.x += self.controls.DistanceUnit;
+                //     self.jumperHead.position.x += self.controls.DistanceUnit;
                 // }else if (self.jumperStatus.currentDirection === Direction.Left){
-                //     self.jumperBody.position.z -= self.config.distanceUnit;
-                //     self.jumperHead.position.z -= self.config.distanceUnit;
+                //     self.jumperBody.position.z -= self.controls.DistanceUnit;
+                //     self.jumperHead.position.z -= self.controls.DistanceUnit;
                 // }else if (self.jumperStatus.currentDirection === Direction.Right){
-                //     self.jumperBody.position.z += self.config.distanceUnit;
-                //     self.jumperHead.position.z += self.config.distanceUnit;
+                //     self.jumperBody.position.z += self.controls.DistanceUnit;
+                //     self.jumperHead.position.z += self.controls.DistanceUnit;
                 // }
 
                 self.renderer.render(self.scene, self.camera);
@@ -709,8 +721,8 @@ Jump.prototype = {
                         self.jumperHead.rotation.z -= Math.PI / 75;
 
                         if (self.jumperBody.position.y > 0) {
-                            self.jumperBody.position.y -= self.config.heightUnit / 20;
-                            self.jumperHead.position.y -= self.config.heightUnit / 20;
+                            self.jumperBody.position.y -= self.controls.HeightUnit / 20;
+                            self.jumperHead.position.y -= self.controls.HeightUnit / 20;
                         }
 
                         self.renderer.render(self.scene, self.camera);
@@ -727,8 +739,8 @@ Jump.prototype = {
                         self.jumperHead.rotation.z += Math.PI / 75;
 
                         if (self.jumperBody.position.y > 0) {
-                            self.jumperBody.position.y -= self.config.heightUnit / 20;
-                            self.jumperHead.position.y -= self.config.heightUnit / 20;
+                            self.jumperBody.position.y -= self.controls.HeightUnit / 20;
+                            self.jumperHead.position.y -= self.controls.HeightUnit / 20;
                         }
 
                         self.renderer.render(self.scene, self.camera);
@@ -745,8 +757,8 @@ Jump.prototype = {
                         self.jumperHead.rotation.x += Math.PI / 75;
 
                         if (self.jumperBody.position.y > 0) {
-                            self.jumperBody.position.y -= self.config.heightUnit / 20;
-                            self.jumperHead.position.y -= self.config.heightUnit / 20;
+                            self.jumperBody.position.y -= self.controls.HeightUnit / 20;
+                            self.jumperHead.position.y -= self.controls.HeightUnit / 20;
                         }
 
                         self.renderer.render(self.scene, self.camera);
@@ -763,8 +775,8 @@ Jump.prototype = {
                         self.jumperHead.rotation.x -= Math.PI / 75;
 
                         if (self.jumperBody.position.y > 0) {
-                            self.jumperBody.position.y -= self.config.heightUnit / 20;
-                            self.jumperHead.position.y -= self.config.heightUnit / 20;
+                            self.jumperBody.position.y -= self.controls.HeightUnit / 20;
+                            self.jumperHead.position.y -= self.controls.HeightUnit / 20;
                         }
 
                         self.renderer.render(self.scene, self.camera);
@@ -789,8 +801,8 @@ Jump.prototype = {
         function act() {
 
             if (self.jumperBody.position.y > 0){
-                self.jumperBody.position.y -= self.config.heightUnit;
-                self.jumperHead.position.y -= self.config.heightUnit;
+                self.jumperBody.position.y -= self.controls.HeightUnit;
+                self.jumperHead.position.y -= self.controls.HeightUnit;
 
                 self.renderer.render(self.scene, self.camera);
 
@@ -826,20 +838,20 @@ Jump.prototype = {
         self.jumperHead.scale.y += 0.01;
 
         if(direction === Direction.Left){
-            self.jumperBody.position.z -= self.config.distanceUnit;
-            self.jumperHead.position.z -= self.config.distanceUnit;
+            self.jumperBody.position.z -= self.controls.DistanceUnit;
+            self.jumperHead.position.z -= self.controls.DistanceUnit;
         }else if(direction === Direction.Right){
-            self.jumperBody.position.z += self.config.distanceUnit;
-            self.jumperHead.position.z += self.config.distanceUnit;
+            self.jumperBody.position.z += self.controls.DistanceUnit;
+            self.jumperHead.position.z += self.controls.DistanceUnit;
         }else{
-            self.jumperBody.position.x += self.config.distanceUnit;
-            self.jumperHead.position.x += self.config.distanceUnit;
+            self.jumperBody.position.x += self.controls.DistanceUnit;
+            self.jumperHead.position.x += self.controls.DistanceUnit;
         }
 
-        self.jumperBody.position.y += self.jumperStatus.potentialEnergy * self.config.heightUnit;
-        self.jumperHead.position.y += self.jumperStatus.potentialEnergy * self.config.heightUnit;
+        self.jumperBody.position.y += self.jumperStatus.potentialEnergy * self.controls.HeightUnit;
+        self.jumperHead.position.y += self.jumperStatus.potentialEnergy * self.controls.HeightUnit;
 
-        self.jumperStatus.potentialEnergy -= self.config.potentialEnergyUnit;
+        self.jumperStatus.potentialEnergy -= self.controls.PotentialEnergyUnit;
     },
 
     Restart: function(){
