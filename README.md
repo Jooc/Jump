@@ -78,4 +78,4 @@
 
 ### 4. 附录
 
-​		项目访问链接：https://chosendebugger.github.io/Jump/
+​		项目访问链接：https://jooc.github.io/Jump/
